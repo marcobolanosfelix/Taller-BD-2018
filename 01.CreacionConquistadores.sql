@@ -1,5 +1,7 @@
 create database Conquistadores;
+go
 use Conquistadores;
+go
 
 create table Pais (
     id int not null identity,
