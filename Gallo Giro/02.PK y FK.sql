@@ -1,0 +1,116 @@
+---2do Paso: Creación de PK y FK
+ALTER TABLE [Almacen] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([id])
+;
+
+ALTER TABLE [Calle] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([id])
+;
+ALTER TABLE [CEDIS] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([id_Almacen])
+;
+
+ALTER TABLE [Ciudad] 
+ ADD CONSTRAINT [PK_Ciudad]
+	PRIMARY KEY CLUSTERED ([id])
+;
+
+ALTER TABLE [ Cliente] 
+ ADD CONSTRAINT [PK_ Cliente]
+	PRIMARY KEY CLUSTERED ([id])
+;
+
+ALTER TABLE [Colonia] 
+ ADD CONSTRAINT [PK_Colonia]
+	PRIMARY KEY CLUSTERED ([id])
+;
+
+ALTER TABLE [Componente_Activo] 
+ ADD CONSTRAINT [PK_Componente_Activo]
+	PRIMARY KEY CLUSTERED ([id])
+;
+
+ALTER TABLE [CompraProducto] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([Folio])
+;
+ALTER TABLE [DetalleVenta] 
+ ADD CONSTRAINT [PK_DetalleVenta]
+	PRIMARY KEY CLUSTERED ([Folio_Venta],[UPC_Producto])
+;
+
+ALTER TABLE [Dimensión] 
+ ADD CONSTRAINT [PK_Producto]
+	PRIMARY KEY CLUSTERED ([id])
+;
+ALTER TABLE [Dirección] 
+ ADD CONSTRAINT [PK_Dirección]
+	PRIMARY KEY CLUSTERED ([id])
+;
+ALTER TABLE [Etiqueta_Peligro] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([id])
+;
+
+ALTER TABLE [Familia ] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([id])
+;
+ALTER TABLE [Inventario] 
+ ADD CONSTRAINT [PK_Table2]
+	PRIMARY KEY CLUSTERED ([id])
+;
+ALTER TABLE [Pago] 
+ ADD CONSTRAINT [PK_Pago]
+	PRIMARY KEY CLUSTERED ([ID])
+;
+ALTER TABLE [Peligrosidad_Etiqueta] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([id_Etiqueta],[id_Peligrosidad])
+;
+ALTER TABLE [Peligrosidad_Producto] 
+ ADD CONSTRAINT [PK_Peligrosidad_Producto]
+	PRIMARY KEY CLUSTERED ([id])
+;
+ALTER TABLE [Producto] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([UPC])
+;
+ALTER TABLE [Proveedor] 
+ ADD CONSTRAINT [PK_Proveedor]
+	PRIMARY KEY CLUSTERED ([RFC])
+;
+ALTER TABLE [Sucursal] 
+ ADD CONSTRAINT [PK_Table1]
+	PRIMARY KEY CLUSTERED ([id_Almacen])
+;
+ALTER TABLE [TipoCliente] 
+ ADD CONSTRAINT [PK_TipoCliente]
+	PRIMARY KEY CLUSTERED ([id])
+;
+
+ALTER TABLE [TipoEntrega] 
+ ADD CONSTRAINT [PK_TipoEntrega]
+	PRIMARY KEY CLUSTERED ([id])
+;
+
+ALTER TABLE [TipoPago] 
+ ADD CONSTRAINT [PK_TipoPago]
+	PRIMARY KEY CLUSTERED ([ID])
+;
+ALTER TABLE [TransferenciaInventario] 
+ ADD CONSTRAINT [PK_TransferenciaInventario]
+	PRIMARY KEY CLUSTERED ([id])
+;
+ALTER TABLE [TransferenciaProducto] 
+ ADD CONSTRAINT [PK_TransferenciaProducto]
+	PRIMARY KEY CLUSTERED ([id_TransferenciaInventario],[UPC-Producto])
+;
+
+ALTER TABLE [Venta] 
+ ADD CONSTRAINT [PK_Venta]
+	PRIMARY KEY CLUSTERED ([Folio])
+;
