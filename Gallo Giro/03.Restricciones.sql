@@ -5,12 +5,26 @@ ALTER TABLE [Producto]
  ADD CONSTRAINT [CK_UPC] CHECK (UPC<10000000000000)
 Go
 
-ALTER TABLE [ Cliente] 
+Alter table [Actividad] 
+	add constraint [CK_Actividad_Nombre] unique(Nombre)
+Go
+
+Alter table [TipoCliente]
+	add constraint [CK_TipoCliente_Nombre] check (Tipo IN ('Domestico','Agricultor'))
+Go
+
+ALTER TABLE [Cliente] 
  ADD CONSTRAINT [UQ_RFC] UNIQUE NONCLUSTERED ([RFC])
 Go
+ALTER TABLE Ciudad
+ADD CONSTRAINT UQ_Nombre_Ciudad unique(Nombre)
 
 ALTER TABLE [Almacen] 
  ADD CONSTRAINT [UQ_Dirección] UNIQUE NONCLUSTERED ([id_Dirección])
+Go
+
+Alter table Colonia 
+	add constraint [UQ_Colonia_Ciudad] unique(ID_Ciudad,Nombre)
 Go
 
 ALTER TABLE [Calle] 

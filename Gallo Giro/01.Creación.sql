@@ -3,7 +3,21 @@ Go
 Use [Gallo Giro]
 Go
 ---1er Paso: Creación de las tablas
-CREATE TABLE [ Cliente]
+CREATE TABLE [Actividad]
+(
+ID tinyint not null identity(1,1),
+Nombre varchar(35) not null
+)
+Go
+
+CREATE TABLE [Actividad_Agricultor]
+(
+ID_Actividad tinyint not null,
+ID_Agricultor smallint not null
+)
+Go
+
+CREATE TABLE [Cliente]
 (
 	[RFC] varchar(10) NOT NULL,
 	[ID_Tipo] tinyint NOT NULL,
@@ -11,7 +25,7 @@ CREATE TABLE [ Cliente]
 	[ApellIDoPaterno] varchar(15) NOT NULL,
 	[ApellIDoMaterno] varchar(15) NOT NULL,
 	[ID_Dirección] smallint NOT NULL,
-	[ID] smallint NOT NULL
+	[ID] smallint NOT NULL identity(1,1)
 )
 Go
 
@@ -189,7 +203,7 @@ CREATE TABLE [TipoCliente]
 (
 	[ID] tinyint NOT NULL,
 	[Tipo] varchar(25) NOT NULL,
-	[Descripción] varchar(50) NOT NULL
+	[Descripción] varchar(70) NOT NULL
 )
 Go
 
@@ -239,12 +253,12 @@ CREATE TABLE [Venta]
 )
 Go
 
-CREATE INDEX [IXFK_ Cliente_Dirección] 
- ON [ Cliente] ([ID_Dirección] ASC)
+CREATE INDEX [IXFK_Cliente_Dirección] 
+ ON [Cliente] ([ID_Dirección] ASC)
 Go
 
-CREATE INDEX [IXFK_ Cliente_TipoCliente] 
- ON [ Cliente] ([ID_Tipo] ASC)
+CREATE INDEX [IXFK_Cliente_TipoCliente] 
+ ON [Cliente] ([ID_Tipo] ASC)
 Go
 
 CREATE INDEX [IXFK_Almacen_Dirección] 

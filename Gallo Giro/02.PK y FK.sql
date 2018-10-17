@@ -6,10 +6,21 @@ ALTER TABLE [Almacen]
 	PRIMARY KEY CLUSTERED ([id])
 Go
 
+ALTER TABLE [Actividad]
+ADD CONSTRAINT [PK_Actividad]
+	PRIMARY KEY(ID)
+Go
+
+ALTER TABLE [Actividad_Agricultor]
+ADD CONSTRAINT [PK_Agricultor]
+	PRIMARY KEY(ID_Actividad, ID_Agricultor)
+Go
+
 ALTER TABLE [Calle] 
  ADD CONSTRAINT [PK_Calle]
 	PRIMARY KEY CLUSTERED ([id])
 Go
+
 ALTER TABLE [CEDIS] 
  ADD CONSTRAINT [PK_CEDIS]
 	PRIMARY KEY CLUSTERED ([id_Almacen])
@@ -20,7 +31,7 @@ ALTER TABLE [Ciudad]
 	PRIMARY KEY CLUSTERED ([id])
 Go
 
-ALTER TABLE [ Cliente] 
+ALTER TABLE [Cliente] 
  ADD CONSTRAINT [PK_ Cliente]
 	PRIMARY KEY CLUSTERED ([id])
 Go
@@ -122,11 +133,19 @@ ALTER TABLE [Venta]
 Go
 
 ---3er Paso: Creación de FK
-ALTER TABLE [ Cliente] ADD CONSTRAINT [FK_ Cliente_Dirección]
+ALTER TABLE [Actividad_Agricultor] ADD CONSTRAINT [FK_Actividad_Agricultor_Act]
+	FOREIGN KEY([ID_Actividad]) REFERENCES [Actividad] ([ID])
+Go
+
+ALTER TABLE [Actividad_Agricultor] ADD CONSTRAINT [FK_Actividad_Agricultor_Ag]
+	FOREIGN KEY([ID_Agricultor]) REFERENCES [Cliente] ([ID])
+Go
+
+ALTER TABLE [Cliente] ADD CONSTRAINT [FK_Cliente_Dirección]
 	FOREIGN KEY ([id_Dirección]) REFERENCES [Dirección] ([id]) 
 	Go
 
-ALTER TABLE [ Cliente] ADD CONSTRAINT [FK_ Cliente_TipoCliente]
+ALTER TABLE [Cliente] ADD CONSTRAINT [FK_ Cliente_TipoCliente]
 	FOREIGN KEY ([id_Tipo]) REFERENCES [TipoCliente] ([id]) 
 	Go
 
@@ -175,7 +194,7 @@ ALTER TABLE [Inventario] ADD CONSTRAINT [FK_Inventario_Producto]
 	Go
 
 ALTER TABLE [Pago] ADD CONSTRAINT [FK_Pago_ Cliente]
-	FOREIGN KEY ([ID_Cliente]) REFERENCES [ Cliente] ([id]) 
+	FOREIGN KEY ([ID_Cliente]) REFERENCES [Cliente] ([id]) 
 	Go
 
 ALTER TABLE [Pago] ADD CONSTRAINT [FK_Pago_TipoPago]
@@ -239,7 +258,7 @@ ALTER TABLE [TransferenciaProducto] ADD CONSTRAINT [FK_TransferenciaProducto_Tra
 	Go
 
 ALTER TABLE [Venta] ADD CONSTRAINT [FK_Venta_ Cliente]
-	FOREIGN KEY ([id_Cliente]) REFERENCES [ Cliente] ([id]) 
+	FOREIGN KEY ([id_Cliente]) REFERENCES [Cliente] ([id]) 
 	Go
 
 ALTER TABLE [Venta] ADD CONSTRAINT [FK_Venta_TipoEntrega]

@@ -3,52 +3,48 @@ Go
 ---6to Paso: Cargas iniciales
 select*from Ciudad
 insert into Ciudad(Nombre)
-values('Culiacan')
-insert into Ciudad(nombre)
-values('Mazatlán')
-insert into Ciudad(nombre)
-values('Guaymas')
-insert into Ciudad(nombre)
-values('Hermosillo')
-insert into Ciudad(nombre)
-values('Chihuahua')
-insert into Ciudad(nombre)
-values('Anáhuac')
-insert into Ciudad(nombre)
-values('CD. Obregón')
-insert into Ciudad(nombre)
-values('Guamuchil')
+values('Anáhuac'), ('CD. Obregón'),('Chihuahua'),('Culiacan'), ('Guamuchil'),('Guaymas'), ('Hermosillo'),('Mazatlán'),('CD.Cuauthemoc'),('Navojoa')
 
 ---Colonia
 select ciudad.Nombre, Colonia.Nombre as NombreColonia,Colonia.ID, Calle.id as IDCalle,Calle.nombre as CalleNombre from Colonia inner join Ciudad on colonia.ID_Ciudad=Ciudad.ID 
 inner join Calle on Calle.id_colonia=Colonia.id
-select id from Colonia
+
+select * from Colonia
 INSERT INTO Colonia(Nombre,ID_Ciudad)
-VALUES('Barranchos',1)
+VALUES('Barranchos',4)
 insert into Colonia (Nombre,ID_Ciudad)
-values('Lomas del Sol',1)
+values('Lomas del Sol',4)
 insert into Colonia(Nombre,ID_Ciudad)
-values('Las Quintas',1)
+values('Las Quintas',4)
 insert into Colonia (Nombre,ID_Ciudad)
-values('Los venados',2)
+values('Los venados',8)
 insert into Colonia (Nombre,ID_Ciudad)
-values('El Conchi',2)
+values('El Conchi',8)
 insert into Colonia (Nombre,ID_Ciudad)
-values('Cerro Gandereño',3)
+values('Cerro Gandereño',6)
 insert into Colonia (Nombre,ID_Ciudad)
-values('Las Plazas',3)
+values('Las Plazas',6)
 insert into Colonia (Nombre,ID_Ciudad)
-values('Petrolera',3)
+values('Petrolera',6)
 insert into Colonia (Nombre,ID_Ciudad)
-values('La Matanza',4)
+values('La Matanza',7)
 insert into Colonia (Nombre,ID_Ciudad)
 values('Satelite',7)
 insert into Colonia (Nombre,ID_Ciudad)
-values('Obrera',5)
+values('Obrera',3)
 insert into Colonia (Nombre,ID_Ciudad)
-values('El Pedregal',6)
+values('El Pedregal',1)
 insert into Colonia (Nombre,ID_Ciudad)
-values('Real de Sevilla',7)
+values('Real de Sevilla',2)
+insert into Colonia (Nombre,ID_Ciudad)
+values('Progreso',9)
+insert into Colonia (Nombre,ID_Ciudad)
+values('Francisco Villa',9)
+insert into Colonia (Nombre,ID_Ciudad)
+values('Morelos',5)
+insert into Colonia (Nombre,ID_Ciudad)
+values('Sonora Progresista',10)
+
 
 ---Calle
 select*from Calle
@@ -78,6 +74,8 @@ insert into Calle(ID_Colonia,Nombre)
 values(10,'Calle Ignacio Zaragoza')
 insert into Calle(ID_Colonia,Nombre)
 values(13,'Sta Matilde')
+insert into Calle(ID_Colonia,Nombre)
+values(,'')
 
 ---Dirección
 select*from Dirección
@@ -105,10 +103,20 @@ insert into Dirección(CP,Número,ID_Calle)
 values(85060,null,12)
 insert into Dirección(CP,Número,ID_Calle)
 values(null,517,13)
+insert into Dirección(CP,Número,ID_Calle)
+values(,,)
 
+---Almacen
+select*from Almacen
+insert into Almacen(ID_Dirección)
+values(6),(2),(3),(1),(4),(5),(8)
 
+---Tipo Clientes
+select*from TipoCliente
+insert into TipoCliente(ID,Tipo,Descripción)
+values(1,'Domestico','Personas que compran productos para su jardín o huerto familiar.'),
+(2,'Agricultor','Persona que siembra grandes cantidades de tierra.')
 
-
-
-
-
+---Cliente
+--select*from [Cliente]
+--insert into [Cliente]()
