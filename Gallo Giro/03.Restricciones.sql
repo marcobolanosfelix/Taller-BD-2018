@@ -28,7 +28,7 @@ Alter table Colonia
 Go
 
 ALTER TABLE [Calle] 
- ADD CONSTRAINT [UQ_Nombre_Calle] UNIQUE NONCLUSTERED ([Nombre])
+ ADD CONSTRAINT [UQ_Calle_Ciudad] UNIQUE NONCLUSTERED (Nombre,ID_Ciudad)
 Go
 
 ALTER TABLE [Dimensión] 

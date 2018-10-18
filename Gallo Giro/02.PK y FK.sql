@@ -153,8 +153,8 @@ ALTER TABLE [Almacen] ADD CONSTRAINT [FK_Almacen_Dirección]
 	FOREIGN KEY ([id_Dirección]) REFERENCES [Dirección] ([id])
     Go
 
-ALTER TABLE [Calle] ADD CONSTRAINT [FK_Calle_Colonia]
-	FOREIGN KEY ([id_Colonia]) REFERENCES [Colonia] ([id]) 
+ALTER TABLE [Calle] ADD CONSTRAINT [FK_Calle_Ciudad]
+	FOREIGN KEY ([id_Ciudad]) REFERENCES [Ciudad] ([id]) 
 	Go
 
 ALTER TABLE [CEDIS] ADD CONSTRAINT [FK_CEDIS_Almacen]
@@ -181,8 +181,12 @@ ALTER TABLE [DetalleVenta] ADD CONSTRAINT [FK_DetalleVenta_Venta]
 	FOREIGN KEY ([Folio_Venta]) REFERENCES [Venta] ([Folio]) 
 	Go
 
-ALTER TABLE [Dirección] ADD CONSTRAINT [FK_Dirección_Calle_02]
-	FOREIGN KEY ([id_Calle]) REFERENCES [Calle] ([id]) 
+ALTER TABLE [Dirección] ADD CONSTRAINT [FK_Dirección_Ciudad]
+	FOREIGN KEY ([id_Colonia]) REFERENCES [Colonia] ([id]) 
+	Go
+		
+ALTER TABLE [Dirección] ADD CONSTRAINT [FK_Dirección_Ciudad]
+	FOREIGN KEY ([id_Colonia]) REFERENCES [Colonia] ([id]) 
 	Go
 
 ALTER TABLE [Inventario] ADD CONSTRAINT [FK_Inventario_Almacen]
