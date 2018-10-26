@@ -76,29 +76,31 @@ ALTER TABLE [FraseR]
  ADD CONSTRAINT[PK_Frase]
 	PRIMARY KEY ([ID])
 GO
-ALTER TABLE [Inventario] 
- ADD CONSTRAINT [PK_Table2]
-	PRIMARY KEY CLUSTERED ([id])
-Go
+
+--ALTER TABLE [Inventario] 
+ --ADD CONSTRAINT [PK_Inventario]
+	--PRIMARY KEY CLUSTERED ([id])
+--Go
+
 ALTER TABLE [Pago] 
  ADD CONSTRAINT [PK_Pago]
 	PRIMARY KEY CLUSTERED ([ID])
 Go
 ALTER TABLE [Peligrosidad_Etiqueta] 
  ADD CONSTRAINT [PK_Peligrosidad]
-	PRIMARY KEY CLUSTERED ([id_Etiqueta],[id_Peligrosidad])
+	PRIMARY KEY CLUSTERED ([id_Etiqueta],[ID_Producto])
 Go
-ALTER TABLE [Peligrosidad_Producto] 
+ALTER TABLE [FraseR_Producto] 
  ADD CONSTRAINT [PK_Peligrosidad_Producto]
-	PRIMARY KEY CLUSTERED ([id])
+	PRIMARY KEY CLUSTERED ([ID_Producto],[ID_Frase])
 Go
 ALTER TABLE [Producto] 
  ADD CONSTRAINT [PK_Producto]
-	PRIMARY KEY CLUSTERED ([UPC])
+	PRIMARY KEY CLUSTERED ([ID])
 Go
 ALTER TABLE [Proveedor] 
  ADD CONSTRAINT [PK_Proveedor]
-	PRIMARY KEY CLUSTERED ([RFC])
+	PRIMARY KEY CLUSTERED ([ID])
 Go
 ALTER TABLE [Sucursal] 
  ADD CONSTRAINT [PK_Sucursal]
@@ -130,6 +132,11 @@ Go
 ALTER TABLE [Venta] 
  ADD CONSTRAINT [PK_Venta]
 	PRIMARY KEY CLUSTERED ([Folio])
+Go
+
+ALTER TABLE [Presentación]
+ ADD CONSTRAINT [PK_Presentación]
+	PRIMARY KEY ([UPC])
 Go
 
 ---3er Paso: Creación de FK
@@ -170,11 +177,11 @@ ALTER TABLE [CompraProducto] ADD CONSTRAINT [FK_CompraProducto_CEDIS]
 	Go
 
 ALTER TABLE [CompraProducto] ADD CONSTRAINT [FK_CompraProducto_Producto]
-	FOREIGN KEY ([UPC_Producto]) REFERENCES [Producto] ([UPC]) 
+	FOREIGN KEY ([UPC_Producto]) REFERENCES [Presentación] ([UPC]) 
 	Go
 
 ALTER TABLE [DetalleVenta] ADD CONSTRAINT [FK_DetalleVenta_Producto]
-	FOREIGN KEY ([UPC_Producto]) REFERENCES [Producto] ([UPC]) 
+	FOREIGN KEY ([UPC_Producto]) REFERENCES [Presentación] ([UPC]) 
 	Go
 
 ALTER TABLE [DetalleVenta] ADD CONSTRAINT [FK_DetalleVenta_Venta]
@@ -185,17 +192,21 @@ ALTER TABLE [Dirección] ADD CONSTRAINT [FK_Dirección_Ciudad]
 	FOREIGN KEY ([id_Colonia]) REFERENCES [Colonia] ([id]) 
 	Go
 		
-ALTER TABLE [Dirección] ADD CONSTRAINT [FK_Dirección_Ciudad]
+ALTER TABLE [Dirección] ADD CONSTRAINT [FK_Dirección_Colonia]
 	FOREIGN KEY ([id_Colonia]) REFERENCES [Colonia] ([id]) 
 	Go
 
-ALTER TABLE [Inventario] ADD CONSTRAINT [FK_Inventario_Almacen]
-	FOREIGN KEY ([id_Almacen]) REFERENCES [Almacen] ([id]) 
-	Go
+--ALTER TABLE [Inventario] ADD CONSTRAINT [FK_Inventario_Almacen]
+	--FOREIGN KEY ([ID_Almacen]) REFERENCES [Almacen] ([id]) 
+	--Go
 
-ALTER TABLE [Inventario] ADD CONSTRAINT [FK_Inventario_Producto]
-	FOREIGN KEY ([UPC_Producto]) REFERENCES [Producto] ([UPC]) 
-	Go
+--ALTER TABLE [Inventario_Producto] add constraint [FK_Inventario_Producto_IDInventario]
+	--FOREIGN KEY ([ID_Inventario]) REFERENCES [Inventario]([id])
+	--Go
+
+--ALTER TABLE [Inventario_Producto] ADD CONSTRAINT [FK_Inventario_Producto]
+	--FOREIGN KEY ([UPC_Producto]) REFERENCES [Presentación] ([UPC]) 
+	--Go
 
 ALTER TABLE [Pago] ADD CONSTRAINT [FK_Pago_ Cliente]
 	FOREIGN KEY ([ID_Cliente]) REFERENCES [Cliente] ([id]) 
@@ -210,23 +221,19 @@ ALTER TABLE [Peligrosidad_Etiqueta] ADD CONSTRAINT [FK_Peligrosidad_Etiqueta_Eti
 	Go
 
 ALTER TABLE [Peligrosidad_Etiqueta] ADD CONSTRAINT [FK_Peligrosidad_Etiqueta_Peligrosidad_Producto]
-	FOREIGN KEY ([id_Peligrosidad]) REFERENCES [Peligrosidad_Producto] ([id]) 
+	FOREIGN KEY ([id_Producto]) REFERENCES [Producto] ([id]) 
 	Go
 
-ALTER TABLE [Peligrosidad_Producto] ADD CONSTRAINT [FK_Peligrosidad_Producto_FraseR]
+ALTER TABLE [FraseR_Producto] ADD CONSTRAINT [FK_Peligrosidad_Producto_FraseR]
 	FOREIGN KEY ([id_Frase]) REFERENCES [FraseR] ([ID]) 
 	Go
 
-ALTER TABLE [Peligrosidad_Producto] ADD CONSTRAINT [FK_Peligrosidad_Producto_Producto]
-	FOREIGN KEY ([UPC_Producto]) REFERENCES [Producto] ([UPC]) 
+ALTER TABLE [FraseR_Producto] ADD CONSTRAINT [FK_Peligrosidad_Producto_Producto]
+	FOREIGN KEY ([ID_Producto]) REFERENCES [Producto] ([ID]) 
 	Go
 
 ALTER TABLE [Producto] ADD CONSTRAINT [FK_Producto_Componente_Activo]
 	FOREIGN KEY ([id_ComponenteActivo]) REFERENCES [Componente_Activo] ([id]) 
-	Go
-
-ALTER TABLE [Producto] ADD CONSTRAINT [FK_Producto_Dimensión]
-	FOREIGN KEY ([id_Dimensión]) REFERENCES [Dimensión] ([id]) 
 	Go
 
 ALTER TABLE [Producto] ADD CONSTRAINT [FK_Producto_Familia ]
@@ -234,7 +241,15 @@ ALTER TABLE [Producto] ADD CONSTRAINT [FK_Producto_Familia ]
 	Go
 
 ALTER TABLE [Producto] ADD CONSTRAINT [FK_Producto_Proveedor]
-	FOREIGN KEY ([RFC_Proveedor]) REFERENCES [Proveedor] ([RFC]) 
+	FOREIGN KEY ([ID_Proveedor]) REFERENCES [Proveedor] ([ID]) 
+	Go
+
+ALTER TABLE [Presentación] ADD CONSTRAINT [FK_Dimensión_Producto]
+	FOREIGN KEY (ID_Dimensión) REFERENCES [Dimensión](ID)
+	Go
+
+ALTER TABLE [Presentación] ADD CONSTRAINT [FK_Producto_Dimensión]
+	FOREIGN KEY (ID_Base) REFERENCES [Producto](ID)
 	Go
 
 ALTER TABLE [Sucursal] ADD CONSTRAINT [FK_Sucursal_Almacen]
@@ -254,7 +269,7 @@ ALTER TABLE [TransferenciaInventario] ADD CONSTRAINT [FK_TransferenciaInventario
 	Go
 
 ALTER TABLE [TransferenciaProducto] ADD CONSTRAINT [FK_TransferenciaProducto_Producto]
-	FOREIGN KEY ([UPC-Producto]) REFERENCES [Producto] ([UPC]) 
+	FOREIGN KEY ([UPC-Producto]) REFERENCES [Presentación] ([UPC]) 
 	Go
 
 ALTER TABLE [TransferenciaProducto] ADD CONSTRAINT [FK_TransferenciaProducto_TransferenciaInventario]
