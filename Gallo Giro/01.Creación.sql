@@ -3,28 +3,28 @@ Go
 Use [Gallo Giro]
 Go
 ---1er Paso: Creación de las tablas
-CREATE TABLE [Almacen]
+CREATE TABLE [Almacen]----Check
 (
 	[ID_Dirección] smallint NOT NULL,
 	[ID] smallint NOT NULL IDENTITY (250, 4)
 )
 Go
 
-CREATE TABLE [Actividad]
+CREATE TABLE [Actividad]----Check
 (
 ID tinyint not null identity(1,1),
 Nombre varchar(35) not null
 )
 Go
 
-CREATE TABLE [Actividad_Agricultor]
+CREATE TABLE [Actividad_Agricultor]----Check
 (
 ID_Actividad tinyint not null,
 ID_Agricultor smallint not null
 )
 Go
 
-CREATE TABLE [Cliente]
+CREATE TABLE [Cliente]----Faltan agregar algunos
 (
 	[RFC] varchar(13) NOT NULL,
 	[ID_Tipo] tinyint NOT NULL,
@@ -36,37 +36,31 @@ CREATE TABLE [Cliente]
 )
 Go
 
-CREATE TABLE [Calle]
-(
-	[ID_Ciudad] int NOT NULL,
-	[ID] int NOT NULL identity(1,1),
-	[Nombre] varchar(30) NOT NULL
-)
-Go
 
-CREATE TABLE [CEDIS]
+CREATE TABLE [CEDIS]----Check
 (
 	[ID_Almacen] smallint NOT NULL,
 	[Capacidad_(palets/nivel)] smallint NOT NULL default(320)
 )
 Go
 
-CREATE TABLE [Ciudad]
+CREATE TABLE [Ciudad]----Check
 (
 	[Nombre] varchar(30) NOT NULL,
-	[ID] int NOT NULL IDENTITY (1, 1)
+	[ID] int NOT NULL IDENTITY (1, 1),
+	[ID_Region] tinyint not null
 )
 Go
 
-CREATE TABLE [Colonia]
-(
-	[ID] int NOT NULL identity(1,1),
-	[Nombre] varchar(40) NOT NULL,
-	[ID_Ciudad] int NOT NULL
-)
-Go
+--CREATE TABLE [Colonia]----Check
+--(
+	--[ID] int NOT NULL identity(1,1),
+	--[Nombre] varchar(40) NOT NULL,
+	--[ID_Ciudad] int NOT NULL
+--)
+--Go
 
-CREATE TABLE [Componente_Activo]
+CREATE TABLE [Componente_Activo]----Check
 (
 	[Nombre] varchar(50) NOT NULL,
 	[ID] smallint NOT NULL identity(1,1),
@@ -74,27 +68,35 @@ CREATE TABLE [Componente_Activo]
 )
 Go
 
-CREATE TABLE [CompraProducto]---
+
+CREATE TABLE [Compra]------Check
 (
 	[ID_CEDIS] smallint NOT NULL,
-	[UPC_Producto] bigint NOT NULL,
-	[CantIDad] smallint NOT NULL,
-	[FechaCompra] date,
-	[Folio] varchar(4) NOT NULL,
-	[PrecioUnitario] money NOT NULL
+	[FechaCompra] date not null,
+	[HoraCompra] time not null,
+	[Folio] smallint NOT NULL
 )
 Go
 
-CREATE TABLE [DetalleVenta]---
+CREATE TABLE [CompraProducto]---Faltan agregar algunos
+(
+	[Folio_Compra] smallint not null,
+	[UPC_Producto] bigint NOT NULL,
+	[Cantidad] smallint NOT NULL,
+	[PrecioUnitario] money 
+)
+Go
+
+CREATE TABLE [DetalleVenta]---Faltan agregar algunos
 (
 	[Folio_Venta] smallint NOT NULL,
 	[UPC_Producto] bigint NOT NULL,
 	[Cantidad] smallint NOT NULL,
-	[PrecioUnitarioProducto] money NOT NULL
+	[PrecioUnitarioProducto] money 
 )
 Go
 
-CREATE TABLE [Dimensión]
+CREATE TABLE [Dimensión]----Check
 (
 	[Cantidad] decimal(5,2) NOT NULL,
 	[Unidad_de_Medida] varchar(40) NOT NULL,
@@ -102,17 +104,19 @@ CREATE TABLE [Dimensión]
 )
 Go
 
-CREATE TABLE [Dirección]
+CREATE TABLE [Dirección]----Check
 (
 	[CP] int null,
-	[ID_Calle] int NOT NULL,
+	--[ID_Calle] int NOT NULL,
+	[Calle] varchar(50),
 	[Número] smallint NULL,
-	ID_Colonia int not null,
+	--[ID_Colonia] int not null,
+	[ID_Ciudad] int not null,
 	[ID] smallint NOT NULL IDENTITY (1, 1)
 )
 Go
 
-CREATE TABLE [Etiqueta_Peligro]
+CREATE TABLE [Etiqueta_Peligro]----Check
 (
 	[Nombre_Peligro] varchar(50) NOT NULL,
 	[ID] tinyint NOT NULL IDENTITY (20, 3),
@@ -120,7 +124,7 @@ CREATE TABLE [Etiqueta_Peligro]
 )
 Go
 
-CREATE TABLE [Familia]
+CREATE TABLE [Familia]----Check
 (
 	[Nombre] varchar(30) NOT NULL,
 	[ID] smallint NOT NULL identity(30,3),
@@ -128,58 +132,52 @@ CREATE TABLE [Familia]
 )
 Go
 
-CREATE TABLE [FraseR]
+---CREATE TABLE [FraseR]----Check
+---(
+	---[Frase] varchar(3) NOT NULL,
+	---[ID] tinyint IDENTITY (1, 1), 
+	---Descripción varchar(100) null
+---)
+--Go
+
+CREATE TABLE [Historico_Ventas]----Pendiente
 (
-	[Frase] varchar(3) NOT NULL,
-	[ID] tinyint IDENTITY (1, 1), 
-	Descripción varchar(100) null
+	[UPC_Producto] bigint NOT NULL,
+	[Fecha_Actualización] date not null,
+	[Hora_Actualización] time not null,
+	[Precio_Venta] money not null,
+	[ID] smallint identity(1,1)
 )
 Go
 
+CREATE TABLE [Inventario]----¿Triggers?
+( 
+	[ID] smallint identity(1,1) not null,
+	[UPC_Producto] bigint not NULL,
+	[Stock Producto] smallint NOT NULL,
+	[ID_Almacen] smallint not null
+)
+Go
 
---CREATE TABLE [Inventario]---
---(
- --[ID] smallint NOT NULL IDENTITY (1, 1),
- --[FechaInventario] date NOT NULL,
- --[ID_Almacen] smallint NOT NULL
---)
---Go
-
---CREATE TABLE [Inventario_Producto]---
---(
-	--[UPC_Producto] bigint not NULL,
-	--[PrecioProductoActual] money,
-	--[Stock inicial] smallint NOT NULL,
-	--[Stock actual] smallint NOT NULL,
-	--[ID_Inventario] smallint not null
---)
---Go
-
-CREATE TABLE [Pago]---
+CREATE TABLE [Pago]----Check
 (
 	[ID_Cliente] smallint NOT NULL,
 	[ID_TipoPAgo] tinyint NOT NULL,
 	[Monto] money NOT NULL,
-	[FechaPago] date NOT NULL,
+	[Fecha] date NOT NULL,
+	[Hora] time not null,
 	[ID] smallint NOT NULL IDENTITY (1, 1)
 )
 Go
 
-CREATE TABLE [Peligrosidad_Etiqueta]
+CREATE TABLE [Peligrosidad_Etiqueta]----Check
 (
 	[ID_Etiqueta] tinyint NOT NULL,
 	[ID_Producto] smallint NOT NULL
 )
 Go
 
-CREATE TABLE [FraseR_Producto]
-(
-	[ID_Producto] smallint NOT NULL,
-	[ID_Frase] tinyint NOT NULL,
-)
-Go
-
-CREATE TABLE [Producto]
+CREATE TABLE [Producto]----Check
 (
 	[Punto_de_reorden] smallint NOT NULL,
 	[Nombre] varchar(40) NOT NULL,
@@ -189,8 +187,8 @@ CREATE TABLE [Producto]
 	[ID] smallint not null identity(1,1)
 )
 Go
----Precios_Ventas
-Create table [Presentación]
+
+Create table [Presentación]---Pendiente
 (
 	[ID_Base] smallint not null,
 	[ID_Dimensión] smallint not null,
@@ -200,7 +198,7 @@ Create table [Presentación]
 )
 Go
 
-CREATE TABLE [Proveedor]
+CREATE TABLE [Proveedor]----Check
 (
 	[Nombre] varchar(30) NOT NULL,
 	[RFC] varchar(13) NOT NULL,
@@ -209,14 +207,21 @@ CREATE TABLE [Proveedor]
 )
 Go
 
-CREATE TABLE [Sucursal]
+CREATE TABLE [Region]----Check
+(
+	[Nombre] varchar(50) not null,
+	[ID] tinyint not null identity(1,1)
+)
+Go
+
+CREATE TABLE [Sucursal]----Check
 (
 	[ID_CEDIS] smallint NOT NULL,
 	[ID_Almacen] smallint NOT NULL
 )
 Go
 
-CREATE TABLE [TipoCliente]
+CREATE TABLE [TipoCliente]----Check
 (
 	[ID] tinyint NOT NULL,
 	[Tipo] varchar(25) NOT NULL,
@@ -224,7 +229,7 @@ CREATE TABLE [TipoCliente]
 )
 Go
 
-CREATE TABLE [TipoEntrega]
+CREATE TABLE [TipoEntrega]----Check
 (
 	[Nombre] varchar(25) NOT NULL,
 	[Descripción] varchar(120) NOT NULL,
@@ -232,25 +237,33 @@ CREATE TABLE [TipoEntrega]
 )
 Go
 
-CREATE TABLE [TipoPago]
+CREATE TABLE [TipoPago]----Check
 (
 	[ID] tinyint NOT NULL IDENTITY (1, 1),
 	[Tipo] varchar(20) NOT NULL,
-	[Descripción] varchar(70) NOT NULL
+	[Descripción] varchar(100) NOT NULL
 )
 Go
 
-CREATE TABLE [TransferenciaInventario]
+CREATE TABLE [TransferenciaInventario]-----¿Triggers?
 (
 	[ID_AlmacenEnvío] smallint NOT NULL,
 	[ID_AlmacenRecibe] smallint NOT NULL,
 	[Fecha] date NOT NULL,
-	[Folio] varchar(5) NOT NULL,
 	[ID] smallint NOT NULL
 )
 Go
 
-CREATE TABLE [TransferenciaProducto]
+CREATE TABLE [Saldo]-----¿Triggers?
+(
+	[ID] smallint identity(1,1) not null,
+	[ID_Cliente] smallint not null,
+	[Saldo] money 
+
+)
+Go
+
+CREATE TABLE [TransferenciaProducto]---¿Triggers?
 (
 	[UPC-Producto] bigint NOT NULL,
 	[Cantidad] smallint NOT NULL,
@@ -258,14 +271,20 @@ CREATE TABLE [TransferenciaProducto]
 )
 Go
 
-CREATE TABLE [Venta]
+CREATE TABLE [Venta]----Faltan agregar algunos
 (
 	[ID_Cliente] smallint NOT NULL,
 	[ID_Sucursal] smallint NOT NULL,
 	[Folio] smallint NOT NULL,
 	[Fecha] date NOT NULL,
-	[Hora] time(7),
-	[ID_TipoEntrega] tinyint NOT NULL,
-	[Estatus] varchar(30) NOT NULL
+	[Hora] time(7)
 )
 Go
+
+CREATE TABLE [Venta-Entrega]---Triggers
+(
+	[Folio_Venta] smallint not null,
+	[ID_TipoEntrega] tinyint not null
+)
+Go
+

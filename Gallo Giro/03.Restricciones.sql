@@ -13,14 +13,65 @@ Alter table [TipoCliente]
 	add constraint [CK_TipoCliente_Nombre] check (Tipo IN ('Domestico','Agricultor'))
 Go
 
-Alter table [Venta]
-	add constraint [CK_Venta_Estatus] check (Estatus IN ('Pagado', 'Pendiente'))
+Alter table [Compra]
+	add constraint [CK_Compra_Hora] check (datepart(hour,HoraCompra)>=6 and datepart(hour,HoraCompra)<21)
+Go
+
+Alter table [CompraProducto]
+	add constraint [UQ_Compra_Producto] unique([Folio_Compra],[UPC_Producto])
+Go
+
+ALTER TABLE [DetalleVenta]
+	add constraint [UQ_Venta_Producto] unique([Folio_Venta],[UPC_Producto])
+Go
+
+ALTER TABLE [Historico_Ventas]
+	ADD CONSTRAINT [CK_Precio_Fecha] check(Fecha_Actualización>='04-02-2017')
+Go
+
+ALTER TABLE [Historico_Ventas]
+	ADD CONSTRAINT [UQ_Actualización_Fecha] unique(Fecha_Actualización,Hora_Actualización)
+Go
+
+ALTER TABLE [Historico_Ventas]
+	ADD CONSTRAINT [UQ_Actualización_Precio] unique(Precio_Venta)
+Go
+
+Alter table [TipoPago]
+	add constraint [CK_Tipo_Pago] check (Tipo IN ('Efectivo', 'Tarjeta de Crédito','Cheque Bancario'))
+Go
+
+Alter table [TipoPago]
+	add constraint [UQ_Tipo_Nombre] unique(Tipo)
+Go
+
+Alter table [TransferenciaInventario]
+	add constraint [CK_Transferencia_IDs] check ([ID_AlmacenEnvío]<>[ID_AlmacenRecibe])
+Go
+
+ALTER TABLE [TransferenciaInventario]
+	ADD CONSTRAINT [UQ_Transferencia] unique([Fecha],[ID_AlmacenEnvío],[ID_AlmacenRecibe])
+Go
+
+ALTER TABLE [TransferenciaProducto]
+	ADD CONSTRAINT [UQ_Transferencia_Producto] unique([UPC-Producto],[ID_TransferenciaInventario])
+Go
+
+ALTER TABLE [Saldo]
+	ADD CONSTRAINT [UQ_Saldo_Cliente] unique ([ID_Cliente])
 Go
 
 Alter table [Venta]
-	add constraint [CK_Venta_Hora] check (datepart(hour,Hora)>6 and datepart(hour,Hora)<24)
+	add constraint [UQ_Venta_Cliente] unique ([ID_Cliente],[Fecha],[Hora])
 Go
 
+Alter table [Venta]
+	add constraint [UQ_Venta_Sucursal] unique ([ID_Sucursal],[Fecha],[Hora])
+Go
+
+Alter table [Venta]
+	add constraint [CK_Venta_Hora] check (datepart(hour,Hora)>=6 and datepart(hour,Hora)<21)
+Go
 
 Alter table Dimensión
 	add constraint [CK_Dimensión,UnidaddeMedida] check (Unidad_de_Medida IN ('L','g','Kg','Lb','gal','ml'))
@@ -49,21 +100,17 @@ ALTER TABLE [Familia]
  ADD CONSTRAINT [UQ_Nombre_Familia] unique ([Nombre])
  Go
 
-Alter table Colonia 
-	add constraint [UQ_Colonia_Ciudad] unique(ID_Ciudad,Nombre)
-Go
-
-ALTER TABLE [Calle] 
- ADD CONSTRAINT [UQ_Calle_Ciudad] UNIQUE NONCLUSTERED (Nombre,ID_Ciudad)
-Go
+--Alter table Colonia 
+	--add constraint [UQ_Colonia_Ciudad] unique(ID_Ciudad,Nombre)
+--Go
 
 ALTER TABLE [Etiqueta_Peligro] 
  ADD CONSTRAINT [UQ_Simbolo_Peligro] UNIQUE NONCLUSTERED ([Simbolo])
 Go
 
-ALTER TABLE [FraseR] 
- ADD CONSTRAINT [UQ_Frase] UNIQUE NONCLUSTERED ([Frase])
-Go
+--ALTER TABLE [FraseR] 
+ --ADD CONSTRAINT [UQ_Frase] UNIQUE NONCLUSTERED ([Frase])
+--Go
 
 ALTER TABLE [TipoEntrega]
 	ADD CONSTRAINT [CK_TipoEntrega_Tipo] check(Nombre IN ('A Domicilio','En CEDIS','En Sucursal'))
@@ -73,12 +120,12 @@ ALTER TABLE [TipoEntrega]
 	ADD CONSTRAINT [UQ_TipoEntrega_Nombre] unique ([Nombre])
 Go
 
-ALTER TABLE [Producto] 
- ADD CONSTRAINT [UQ_Nombre_Producto] UNIQUE NONCLUSTERED ([Nombre])
+ALTER TABLE [Venta-Entrega]
+	ADD CONSTRAINT [UQ_Entrega_Folio] unique ([Folio_Venta])
 Go
 
-Alter table [Dirección]
- add constraint [UQ_Dirección_Número] unique(ID_Calle,Número)
+ALTER TABLE [Producto] 
+ ADD CONSTRAINT [UQ_Nombre_Producto] UNIQUE NONCLUSTERED ([Nombre])
 Go
 
 Alter table [Sucursal]
@@ -93,6 +140,6 @@ ALTER TABLE [Proveedor]
  ADD CONSTRAINT [UQ_Proveedor_RFC] unique([RFC])
 Go
 
-ALTER TABLE [FraseR] 
- ADD CONSTRAINT [CK_FraseR_Frase] check (Frase like 'R%')
- Go
+--ALTER TABLE [FraseR] 
+ --ADD CONSTRAINT [CK_FraseR_Frase] check (Frase like 'R%')
+ --Go
