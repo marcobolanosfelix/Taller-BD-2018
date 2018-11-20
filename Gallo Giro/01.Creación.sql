@@ -52,14 +52,6 @@ CREATE TABLE [Ciudad]----Check
 )
 Go
 
---CREATE TABLE [Colonia]----Check
---(
-	--[ID] int NOT NULL identity(1,1),
-	--[Nombre] varchar(40) NOT NULL,
-	--[ID_Ciudad] int NOT NULL
---)
---Go
-
 CREATE TABLE [Componente_Activo]----Check
 (
 	[Nombre] varchar(50) NOT NULL,
@@ -131,14 +123,6 @@ CREATE TABLE [Familia]----Check
 	[Descripción] varchar(120) NOT NULL
 )
 Go
-
----CREATE TABLE [FraseR]----Check
----(
-	---[Frase] varchar(3) NOT NULL,
-	---[ID] tinyint IDENTITY (1, 1), 
-	---Descripción varchar(100) null
----)
---Go
 
 CREATE TABLE [Historico_Ventas]----Pendiente
 (
@@ -214,6 +198,15 @@ CREATE TABLE [Region]----Check
 )
 Go
 
+CREATE TABLE [Saldo]-----¿Triggers?
+(
+	[ID] smallint identity(1,1) not null,
+	[ID_Cliente] smallint not null,
+	[Saldo] money 
+
+)
+Go
+
 CREATE TABLE [Sucursal]----Check
 (
 	[ID_CEDIS] smallint NOT NULL,
@@ -254,15 +247,6 @@ CREATE TABLE [TransferenciaInventario]-----¿Triggers?
 )
 Go
 
-CREATE TABLE [Saldo]-----¿Triggers?
-(
-	[ID] smallint identity(1,1) not null,
-	[ID_Cliente] smallint not null,
-	[Saldo] money 
-
-)
-Go
-
 CREATE TABLE [TransferenciaProducto]---¿Triggers?
 (
 	[UPC-Producto] bigint NOT NULL,
@@ -277,14 +261,9 @@ CREATE TABLE [Venta]----Faltan agregar algunos
 	[ID_Sucursal] smallint NOT NULL,
 	[Folio] smallint NOT NULL,
 	[Fecha] date NOT NULL,
-	[Hora] time(7)
+	[Hora] time(7),
+	[ID_Entrega] tinyint not null
 )
 Go
 
-CREATE TABLE [Venta-Entrega]---Triggers
-(
-	[Folio_Venta] smallint not null,
-	[ID_TipoEntrega] tinyint not null
-)
-Go
 

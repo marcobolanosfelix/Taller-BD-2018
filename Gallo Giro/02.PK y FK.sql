@@ -31,11 +31,6 @@ ALTER TABLE [Cliente]
 	PRIMARY KEY CLUSTERED ([id])
 Go
 
---ALTER TABLE [Colonia] 
- --ADD CONSTRAINT [PK_Colonia]
-	--PRIMARY KEY CLUSTERED ([id])
---Go
-
 ALTER TABLE [Componente_Activo] 
  ADD CONSTRAINT [PK_Componente_Activo]
 	PRIMARY KEY CLUSTERED ([id])
@@ -73,11 +68,6 @@ ALTER TABLE [Familia ]
 	PRIMARY KEY CLUSTERED ([id])
 Go
 
---ALTER TABLE [FraseR]
- --ADD CONSTRAINT[PK_Frase]
-	--PRIMARY KEY ([ID])
---GO
-
 ALTER TABLE [Historico_Ventas]
 	ADD CONSTRAINT [PK_Historico_Ventas]
 		PRIMARY KEY([ID])
@@ -96,10 +86,6 @@ ALTER TABLE [Peligrosidad_Etiqueta]
  ADD CONSTRAINT [PK_Peligrosidad]
 	PRIMARY KEY CLUSTERED ([id_Etiqueta],[ID_Producto])
 Go
---ALTER TABLE [FraseR_Producto] 
- --ADD CONSTRAINT [PK_Peligrosidad_Producto]
-	--PRIMARY KEY CLUSTERED ([ID_Producto],[ID_Frase])
---Go
 
 ALTER TABLE [Producto] 
  ADD CONSTRAINT [PK_Producto]
@@ -150,11 +136,6 @@ Go
 ALTER TABLE [Venta] 
  ADD CONSTRAINT [PK_Venta]
 	PRIMARY KEY CLUSTERED ([Folio])
-Go
-
-ALTER TABLE [Venta-Entrega] 
- ADD CONSTRAINT [PK_Venta-Entrega]
-	PRIMARY KEY CLUSTERED ([Folio_Venta],[ID_TipoEntrega])
 Go
 
 ALTER TABLE [Presentación]
@@ -312,10 +293,6 @@ ALTER TABLE [Venta] ADD CONSTRAINT [FK_Venta_Sucursal]
 	FOREIGN KEY ([ID_Sucursal]) REFERENCES [Sucursal] ([id_Almacen]) 
 	Go
 
-ALTER TABLE [Venta-Entrega] ADD CONSTRAINT [FK_VentaEntrega_Folio]
-	FOREIGN KEY ([Folio_Venta]) REFERENCES [Venta] ([Folio]) 
-	Go
-
-ALTER TABLE [Venta-Entrega] ADD CONSTRAINT [FK_Venta_TipoEntrega]
-	FOREIGN KEY ([ID_TipoEntrega]) REFERENCES [TipoEntrega] ([ID]) 
+ALTER TABLE [Venta] ADD CONSTRAINT [FK_Venta_Entrega]
+	FOREIGN KEY ([ID_Entrega]) REFERENCES [TipoEntrega] ([ID]) 
 	Go

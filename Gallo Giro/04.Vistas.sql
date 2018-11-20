@@ -22,5 +22,12 @@ as
 select s.ID_Almacen,a.ID from Almacen a join Sucursal s on a.ID=s.ID_Almacen 
 Go
 
-drop view AlmacenSucursal
+Create view Venta_Entrega
+as 
+select v.Folio as Folio, t.Nombre as TipoEntrega, v.ID_Sucursal as SucursalID, d.UPC_Producto from DetalleVenta d 
+inner join Venta v on v.Folio=d.Folio_Venta inner join TipoEntrega t on t.ID=v.ID_Entrega 
+Go
 
+
+select Folio from Venta_Entrega where TipoEntrega='En Sucursal'
+drop view Venta_Entrega

@@ -25,16 +25,16 @@ ALTER TABLE [DetalleVenta]
 	add constraint [UQ_Venta_Producto] unique([Folio_Venta],[UPC_Producto])
 Go
 
+ALTER TABLE [DetalleVenta]
+	add constraint [CK_Validar_Cantidad] check(Cantidad>0)
+Go
+
 ALTER TABLE [Historico_Ventas]
 	ADD CONSTRAINT [CK_Precio_Fecha] check(Fecha_Actualización>='04-02-2017')
 Go
 
 ALTER TABLE [Historico_Ventas]
-	ADD CONSTRAINT [UQ_Actualización_Fecha] unique(Fecha_Actualización,Hora_Actualización)
-Go
-
-ALTER TABLE [Historico_Ventas]
-	ADD CONSTRAINT [UQ_Actualización_Precio] unique(Precio_Venta)
+	ADD CONSTRAINT [UQ_Actualización_Precio] unique(Precio_Venta,UPC_Producto)
 Go
 
 Alter table [TipoPago]
@@ -92,8 +92,12 @@ ALTER TABLE Componente_Activo
  ADD CONSTRAINT [UQ_Componente_Nombre] UNIQUE(Nombre)
  Go
 
+ ALTER TABLE [Dirección]
+ ADD CONSTRAINT [UQ_Dirección] UNIQUE(Calle,ID_Ciudad,Número)
+ Go
+
 ALTER TABLE [Almacen] 
- ADD CONSTRAINT [UQ_Dirección] UNIQUE NONCLUSTERED ([id_Dirección])
+ ADD CONSTRAINT [UQ_Dirección_Almacen] UNIQUE NONCLUSTERED ([id_Dirección])
 Go
 
 ALTER TABLE [Familia]
@@ -120,10 +124,6 @@ ALTER TABLE [TipoEntrega]
 	ADD CONSTRAINT [UQ_TipoEntrega_Nombre] unique ([Nombre])
 Go
 
-ALTER TABLE [Venta-Entrega]
-	ADD CONSTRAINT [UQ_Entrega_Folio] unique ([Folio_Venta])
-Go
-
 ALTER TABLE [Producto] 
  ADD CONSTRAINT [UQ_Nombre_Producto] UNIQUE NONCLUSTERED ([Nombre])
 Go
@@ -140,6 +140,6 @@ ALTER TABLE [Proveedor]
  ADD CONSTRAINT [UQ_Proveedor_RFC] unique([RFC])
 Go
 
---ALTER TABLE [FraseR] 
- --ADD CONSTRAINT [CK_FraseR_Frase] check (Frase like 'R%')
- --Go
+ALTER TABLE [Region] 
+ADD CONSTRAINT [UQ_Nombre_Región] unique([Nombre])
+Go
