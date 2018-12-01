@@ -34,7 +34,7 @@ ALTER TABLE [Historico_Ventas]
 Go
 
 ALTER TABLE [Historico_Ventas]
-	ADD CONSTRAINT [UQ_Actualización_Precio] unique(Precio_Venta,UPC_Producto)
+	ADD CONSTRAINT [UQ_Precio_Fecha] unique(Fecha_Actualización,UPC_Producto)
 Go
 
 Alter table [TipoPago]
@@ -55,10 +55,6 @@ Go
 
 ALTER TABLE [TransferenciaProducto]
 	ADD CONSTRAINT [UQ_Transferencia_Producto] unique([UPC-Producto],[ID_TransferenciaInventario])
-Go
-
-ALTER TABLE [Saldo]
-	ADD CONSTRAINT [UQ_Saldo_Cliente] unique ([ID_Cliente])
 Go
 
 Alter table [Venta]

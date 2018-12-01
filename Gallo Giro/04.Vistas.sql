@@ -22,12 +22,28 @@ as
 select s.ID_Almacen,a.ID from Almacen a join Sucursal s on a.ID=s.ID_Almacen 
 Go
 
+Create view CEDISRand
+as
+select top(1) ID_Almacen from CEDIS order by NEWID()
+Go
+
+Create view AlmacenRand
+as
+select top(1) ID from Almacen order by NEWID()
+Go
+
+Create view Producto_Rand
+as
+select top(1) UPC from Presentación order by NEWID()
+Go
+
 Create view Venta_Entrega
 as 
 select v.Folio as Folio, t.Nombre as TipoEntrega, v.ID_Sucursal as SucursalID, d.UPC_Producto from DetalleVenta d 
 inner join Venta v on v.Folio=d.Folio_Venta inner join TipoEntrega t on t.ID=v.ID_Entrega 
 Go
 
-
-select Folio from Venta_Entrega where TipoEntrega='En Sucursal'
-drop view Venta_Entrega
+Create view Presentación_Precio
+as
+select UPC,PrecioUnitarioActual from Presentación 
+Go

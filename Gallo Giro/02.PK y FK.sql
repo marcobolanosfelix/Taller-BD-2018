@@ -128,11 +128,6 @@ ALTER TABLE [TransferenciaProducto]
 	PRIMARY KEY CLUSTERED ([id_TransferenciaInventario],[UPC-Producto])
 Go
 
-ALTER TABLE [Saldo]
-ADD CONSTRAINT [PK_Saldo]
-	PRIMARY KEY CLUSTERED ([ID])
-Go
-
 ALTER TABLE [Venta] 
  ADD CONSTRAINT [PK_Venta]
 	PRIMARY KEY CLUSTERED ([Folio])

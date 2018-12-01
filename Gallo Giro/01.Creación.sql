@@ -198,15 +198,6 @@ CREATE TABLE [Region]----Check
 )
 Go
 
-CREATE TABLE [Saldo]-----¿Triggers?
-(
-	[ID] smallint identity(1,1) not null,
-	[ID_Cliente] smallint not null,
-	[Saldo] money 
-
-)
-Go
-
 CREATE TABLE [Sucursal]----Check
 (
 	[ID_CEDIS] smallint NOT NULL,

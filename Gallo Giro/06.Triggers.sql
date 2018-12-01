@@ -14,14 +14,6 @@ as
  select @cantidad=Cantidad,@UPC=UPC_Producto,@IDSucursal=ID_Sucursal,@TipoEntrega=t.Nombre from inserted i inner join Venta v on v.Folio=i.Folio_Venta 
  inner join TipoEntrega t on t.ID=v.ID_Entrega
 
-
-		if(@cantidad=0)
-			begin 
-				raiserror('No se puede vender una cantidad nula de productos',10,1);
-				rollback
-				return
-			end
-
 		if not exists (select * from Inventario
 		where @UPC=UPC_Producto and @IDSucursal=ID_Almacen)
 			begin
@@ -35,11 +27,20 @@ as
 		declare @flag bit
 		exec @flag= Peligrosidad_Validación @UPC
 
-			if ((select [Stock Producto] from Inventario where ID_Almacen=@IDSucursal and UPC_Producto=@UPC )<>0 and @flag='False')
+			if ((select [Stock Producto]-@cantidad from Inventario where ID_Almacen=@IDSucursal and UPC_Producto=@UPC)<0 and @flag='False')
 			raiserror('Puedes recoger el producto en tienda, gracias por su compresión',10,1)
 			rollback
 			return
 		end
+
+		if(@TipoEntrega ='A Domicilio')
+		begin
+			if not exists(select*from Inventario where @IDSucursal=ID_Almacen and @UPC=UPC_Producto) or (select [Stock Producto]-@cantidad from Inventario where @IDSucursal=ID_Almacen and @UPC=UPC_Producto)<0
+			begin
+			set	@IDSucursal=(select ID_Almacen from CEDIS where ID_Almacen=(select ID_CEDIS from Sucursal where ID_Almacen=254))
+			end
+		end
+
 
 exec Actualizar_Inventario'False',@IDSucursal,@UPC,@cantidad
 if(@@ERROR<>0)
@@ -60,7 +61,7 @@ if not exists (select * from Inventario where @UPC=UPC_Producto and @IDCEDIS=ID_
 	begin 
 		insert into Inventario(ID_Almacen,UPC_Producto,[Stock Producto])
 		values(@IDCEDIS,@UPC,@cantidad)
-		print 'Se agregó el producto al inventario del CEDIS con ID: '+@IDCEDIS
+		print 'Se agregó el producto al inventario del CEDIS con ID: '+convert(varchar,@IDCEDIS)
 		return;
 	end
 
@@ -129,7 +130,7 @@ as
 	 begin
 		if @Almacen_Recibe in (select ID_Almacen from Sucursal)
 		begin
-			if not exists(select*from Sucursal where ID_CEDIS=@Almacen_Recibe and @Almacen_Envio=ID_Almacen)
+			if not exists(select*from Sucursal where ID_CEDIS=@Almacen_Envio and ID_Almacen=@Almacen_Recibe)
 			begin
 				raiserror('Este CEDIS no puede realizar una transferencia a una sucursal a la que no ha sido asignado',16,1)
 				rollback
@@ -137,6 +138,40 @@ as
 			end
 		end
 	 end
+Go
+
+---Validar los procesos desarrollados en una transferencia de producto
+Create Trigger ValidarTransferenciaProducto
+On TransferenciaProducto after insert 
+as
+	declare @UPC bigint
+	declare @Cantidad smallint
+	declare @IDRecibe smallint
+	declare @IDEnvía smallint
+
+	select @UPC=i.[UPC-Producto],@Cantidad=i.Cantidad,@IDRecibe=t.ID_AlmacenRecibe,@IDEnvía=t.ID_AlmacenEnvío from inserted i 
+	inner join TransferenciaInventario t on t.ID=i.ID_TransferenciaInventario
+
+	if @IDRecibe in(select ID_Almacen from Sucursal)
+	begin  
+		declare @flag bit
+		exec @flag= Peligrosidad_Validación @UPC
+		if(@flag='True')
+			begin 
+			raiserror('Es muy peligroso que este producto permanezca en una sucursal',16,1)
+			rollback
+			end
+
+	exec Actualizar_Inventario 'False',@IDEnvía,@UPC,@Cantidad
+	if(@@ERROR<>0)
+	begin
+		return
+		rollback
+	end
+
+	exec Actualizar_Inventario 'True',@IDRecibe,@UPC,@Cantidad
+
+	end
 Go
 
 ---Validar las operaciones realizadas dentro de la tabla de inventarios
@@ -168,7 +203,7 @@ as
 	if not exists (select*from Historico_Ventas where @UPC=UPC_Producto)
 	begin
 		insert into Historico_Ventas(UPC_Producto,Precio_Venta,Fecha_Actualización,Hora_Actualización)
-		values(@UPC,@PrecioInsertado, (select format(convert(date,getdate()),'yyyy/MM/dd')), (select format(convert(time,getdate()),'hh\:mm\:ss')))
+		values(@UPC,@PrecioInsertado, (select format (convert(date,getdate()),'yyyy/MM/dd')), (select format(convert(time,getdate()),'hh\:mm\:ss')))
 		return
 	end	
 
@@ -217,18 +252,6 @@ as
 	exec @PrecioActualizar=Asignar_Precio @Folio,@Fecha,@Hora,@UPC,'False'
 
 	exec Precios_Venta_Compra @Cantidad,@UPC,@Folio,@PrecioActualizar,'True'
-
-Go
-
-----Inicializar el saldo del cliente como 0 al momento de ingresar un nuevo cliente
-Create Trigger Saldo_Cliente
-On Cliente after insert 
-as
-	declare @IDCliente smallint
-select @IDCliente=id from inserted
-	
-	insert into Saldo(ID_Cliente,Saldo)
-	values(@IDCliente,0)
 
 Go
 
