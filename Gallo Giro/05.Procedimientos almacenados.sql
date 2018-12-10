@@ -14,10 +14,25 @@ as
 
 if(@Operación='True')
 begin
+
+	if not exists (select * from Inventario where @UPC=UPC_Producto and @IDAlmacen=ID_Almacen)
+		begin 
+			insert into Inventario(ID_Almacen,UPC_Producto,[Stock Producto])
+			values(@IDAlmacen,@UPC,@cantidad)
+			print 'Se agregó el producto al inventario del Almacen con ID: '+convert(varchar,@IDAlmacen)
+			return
+		end
 update Inventario set [Stock Producto]=([Stock Producto]+@cantidad) where @UPC=UPC_Producto and @IDAlmacen=ID_Almacen
 return
 end
 
+
+if not exists (select * from Inventario where @UPC=UPC_Producto and @IDAlmacen=ID_Almacen)
+		begin 
+			raiserror('El producto no existe en el inventario',16,1)
+			return
+			rollback
+		end
 update Inventario set [Stock Producto]=([Stock Producto]-@cantidad) where @UPC=UPC_Producto and @IDAlmacen=ID_Almacen
 Go
 
@@ -56,14 +71,15 @@ as
 if(@FechaMovimiento<@FechaPrimerRegistro)
 	begin
 		if (@Movimiento='True')
-		 begin
-			print 'Ya sientese, señora'
-			delete from DetalleVenta where @Folio_Movimiento=Folio_Venta and @UPC=UPC_Producto
+		 begin;
+			THROW 51000,'La fecha de venta no coincide con el primer registro que se tiene del producto',1
 			return
 		end
 		else
-			delete from CompraProducto where @Folio_Movimiento=Folio_Compra and @UPC=UPC_Producto
+		 begin;
+			THROW 51000,'La fecha de compra no coincide con el primer registro que se tiene del producto',1
 			return
+		 end
 		end
 
 declare @contador int=1

@@ -276,10 +276,6 @@ ALTER TABLE [TransferenciaProducto] ADD CONSTRAINT [FK_TransferenciaProducto_Tra
 	FOREIGN KEY ([id_TransferenciaInventario]) REFERENCES [TransferenciaInventario] ([id]) 
 	Go
 
-ALTER TABLE [Saldo] ADD CONSTRAINT [FK_Saldo_ Cliente]
-	FOREIGN KEY ([id_Cliente]) REFERENCES [Cliente] ([id]) 
-	Go
-
 ALTER TABLE [Venta] ADD CONSTRAINT [FK_Venta_ Cliente]
 	FOREIGN KEY ([id_Cliente]) REFERENCES [Cliente] ([id]) 
 	Go
