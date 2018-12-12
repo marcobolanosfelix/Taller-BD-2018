@@ -47,3 +47,18 @@ Create view Presentación_Precio
 as
 select UPC,PrecioUnitarioActual from Presentación 
 Go
+
+Create view Stock_Sucursal
+as
+select UPC_Producto,[Stock Producto],Sucursal.ID_Almacen as ID_Sucursal,ID_CEDIS,Folio as [Folio Venta], Nombre from Venta inner join
+TipoEntrega on TipoEntrega.ID=Venta.ID_Entrega 
+left join Inventario on Inventario.ID_Almacen=Venta.ID_Sucursal
+left join Sucursal on Sucursal.ID_Almacen=Venta.ID_Sucursal 
+Go
+
+Create view [Productos Peligrosos]
+as 
+select UPC from Presentación p where exists(select*from Presentación pe
+inner join Peligrosidad_Etiqueta pel on pel.ID_Producto=pe.ID_Base 
+inner join Etiqueta_Peligro e on e.ID=pel.ID_Etiqueta where p.UPC=pe.UPC and (e.Simbolo='E' or e.Simbolo='T+' or e.Simbolo='C' or e.Simbolo='F+') )
+Go

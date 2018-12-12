@@ -24,7 +24,6 @@ as
 	   return
 	end catch
 Go
-
 ---Actualizar el stock del inventario al momento de una venta
 Create Trigger Venta_Almacen
 On DetalleVenta after insert
@@ -42,21 +41,26 @@ as
 
 		if(@TipoEntrega='En CEDIS')
 		begin
+		declare @IDSucTemp smallint
+		set @IDSucTemp=@IDSucursal
+		select @IDSucursal=s.ID_CEDIS from inserted i inner join Venta v on v.Folio=i.Folio_Venta inner join Sucursal s on s.ID_Almacen=v.ID_Sucursal
 		declare @flag bit
 		exec @flag= Peligrosidad_Validación @UPC
 
-			if ((select [Stock Producto]-@cantidad from Inventario where ID_Almacen=@IDSucursal and UPC_Producto=@UPC)<0 and @flag='False')
-			raiserror('Puedes recoger el producto en tienda, gracias por su compresión',10,1)
-			rollback
-			return
+			if ((select [Stock Producto]-@cantidad from Inventario where ID_Almacen=@IDSucursal and UPC_Producto=@UPC)<0 and @flag='False' and 
+			(select [Stock Producto]-@cantidad from Inventario where ID_Almacen=@IDSucTemp and UPC_Producto=@UPC)>=0)
+			begin
+				raiserror('Puedes recoger el producto en tienda, gracias por su compresión',16,1)
+				rollback tran
+				return
+			end
 		end
 
 		if(@TipoEntrega ='A Domicilio')
 		begin
-			if not exists(select*from Inventario where @IDSucursal=ID_Almacen and @UPC=UPC_Producto) or (select [Stock Producto]-@cantidad from Inventario where @IDSucursal=ID_Almacen and @UPC=UPC_Producto)<0
+			if (select [Stock Producto]-@cantidad from Inventario where @IDSucursal=ID_Almacen and @UPC=UPC_Producto)<0
 			begin
 				declare @cantTemp smallint
-
 				set @cantTemp=@cantidad
 				set @cantidad=(select [Stock Producto] from Inventario where @IDSucursal=ID_Almacen and @UPC=UPC_Producto)
 
@@ -77,8 +81,10 @@ as
 				set	@IDSucursal=(select ID_CEDIS from Sucursal where ID_Almacen=@IDSucursal)
 				set @cantidad=@cantTemp-@cantidad
 			end
-		end
 
+		if not exists(select*from Inventario where @IDSucursal=ID_Almacen and @UPC=UPC_Producto)  
+		set	@IDSucursal=(select ID_CEDIS from Sucursal where ID_Almacen=@IDSucursal)
+		end
 				begin try
 				   exec Actualizar_Inventario'False',@IDSucursal,@UPC,@cantidad
 				end try
@@ -93,7 +99,6 @@ as
 					return
 				end catch
 Go
-
 ---Evaluar que los precios de los productos implicados en las compras cumplan con los requerimientos establecidos
 Create Trigger Precios_Compra
 On CompraProducto after insert
@@ -225,6 +230,7 @@ as
 			rollback tran
 			return
 			end
+	end
 
 		begin try
 			exec Actualizar_Inventario 'False',@IDEnvía,@UPC,@Cantidad
@@ -244,8 +250,6 @@ as
 		raiserror(@MensajeError,@Severidad,@EstadoError)
 		rollback
 		end catch
-	
-	end
 Go
 ---Validar las operaciones realizadas dentro de la tabla de inventarios
 Create Trigger Inventario_Validaciones

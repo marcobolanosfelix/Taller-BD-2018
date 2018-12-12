@@ -26,12 +26,11 @@ update Inventario set [Stock Producto]=([Stock Producto]+@cantidad) where @UPC=U
 return
 end
 
-
 if not exists (select * from Inventario where @UPC=UPC_Producto and @IDAlmacen=ID_Almacen)
 		begin 
 			raiserror('El producto no existe en el inventario',16,1)
-			return
 			rollback
+			return
 		end
 update Inventario set [Stock Producto]=([Stock Producto]-@cantidad) where @UPC=UPC_Producto and @IDAlmacen=ID_Almacen
 Go
@@ -42,9 +41,7 @@ Create procedure Peligrosidad_Validación
 @UPC bigint
 )
 as
-if exists(select*from Presentación pe
-inner join Peligrosidad_Etiqueta pel on pel.ID_Producto=pe.ID_Base 
-inner join Etiqueta_Peligro e on e.ID=pel.ID_Etiqueta where @UPC=pe.UPC and (e.Simbolo='E' or e.Simbolo='T+' or e.Simbolo='C' or e.Simbolo='F+') ) 
+if exists(select*from [Productos Peligrosos] where @UPC=UPC) 
 return 1
 
 else
