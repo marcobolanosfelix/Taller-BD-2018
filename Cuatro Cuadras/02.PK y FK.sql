@@ -67,7 +67,7 @@ alter table Lugar add constraint FK_Lugar_Categoria
 GO
 
 Alter table Etiqueta_Lugar add constraint FK_Lugar_Etiqueta
-	foreign key (id_lugar) references Lugar(id)
+	foreign key (id_lugar) references Lugar(id) on delete cascade
 Go
 
 Alter table Etiqueta_Lugar add constraint FK_Etiqueta_Lugar
@@ -75,7 +75,7 @@ Alter table Etiqueta_Lugar add constraint FK_Etiqueta_Lugar
 Go
 
 Alter table Intereses_Usuario add constraint Fk_Intereses_Usuario
-	foreign key(id_usuario) references Usuario(id)
+	foreign key(id_usuario) references Usuario(id) on delete cascade
 Go
 
 Alter table Intereses_Usuario add constraint Fk_Intereses_Usuario_Intereses
@@ -87,11 +87,11 @@ Alter table Usuario add constraint FK_Ciudad_id
 Go
 
 alter table Checkin add constraint FK_lugar_id 
-	foreign key(lugar_id) references Lugar(id)
+	foreign key(lugar_id) references Lugar(id) on delete cascade
 GO
 
 alter table Checkin add constraint FK_usuario_id 
-	foreign key(usuario_id)references Usuario(id)
+	foreign key(usuario_id)references Usuario(id) on delete cascade
 GO
 
 alter table Logro add constraint FK_id_insignia 
@@ -99,17 +99,18 @@ alter table Logro add constraint FK_id_insignia
 GO
 
 alter table Logro add constraint FK_id_usuario 
-	foreign key(id_usuario)references Usuario(id)
+	foreign key(id_usuario)references Usuario(id) on delete cascade
 GO
 
 alter table Logro add constraint FK_id_lugar 
-	foreign key(lugar_id) references Lugar(id)
+	foreign key(lugar_id) references Lugar(id) on delete cascade
 GO
 
 alter table Solicitud add constraint FK_id_recibe 
-	foreign key(id_recibe)references Usuario(id)
+	foreign key(id_recibe)references Usuario(id) on delete cascade
 GO
 
 alter table Solicitud add constraint FK_id_envia 
-	foreign key(id_envio)references Usuario(id)
+	foreign key(id_envio)references Usuario(id) on delete no action
  GO
+

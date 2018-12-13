@@ -1,4 +1,5 @@
 use cuatro_cuadras
+Go
 --1 Numero de check in que se hicieron en la fecha 09/10/2018
 select count(*)
 from Checkin

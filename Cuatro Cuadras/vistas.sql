@@ -1,5 +1,5 @@
-
-
+Use Cuatro_Cuadras
+Go
 go
 create view Usuarios_V
 as

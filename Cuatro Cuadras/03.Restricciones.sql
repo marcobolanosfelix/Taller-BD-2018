@@ -33,10 +33,6 @@ Alter table Checkin add constraint CK_Checkin_Valoración
  unique(lugar_id,usuario_id,fecha,hora)
  Go
 
- Alter table Solicitud add constraint UQ_Solicitud_Usuario_Envio
- unique(id_recibe,id_envio)
- Go
-
  Alter table Solicitud add constraint CK_Solicitud_Recibe_Envia
  check(estado IN('En espera','Aceptado','Rechazado'))
  GO
