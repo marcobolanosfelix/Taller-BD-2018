@@ -143,14 +143,14 @@ CREATE TABLE [Inventario]----¿Triggers?
 )
 Go
 
-CREATE TABLE [Pago]----Check
+Create TABLE [Pago]----Check
 (
 	[ID_Cliente] smallint NOT NULL,
 	[ID_TipoPAgo] tinyint NOT NULL,
 	[Monto] money NOT NULL,
 	[Fecha] date NOT NULL,
 	[Hora] time not null,
-	[ID] smallint NOT NULL IDENTITY (1, 1)
+	[ID] smallint NOT NULL
 )
 Go
 

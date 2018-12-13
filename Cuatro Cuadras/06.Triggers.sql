@@ -1,3 +1,5 @@
+use Cuatro_Cuadras
+Go
 create trigger ValidaCategoria on Categoria 
 for insert as
 declare @nombre varchar(50)
@@ -9,22 +11,11 @@ rollback tran
 	end
 	go
 
-create trigger t_longitud on Lugar
-for insert as
-declare @longitud decimal(5,2)
-select @longitud = longitud from inserted
-if(@longitud<20)
-begin 
-	rollback tran
-    raiserror('la longitud debe ser mayor a 20',16,1)
-end
-go
-
 create trigger Validacontraseña on Usuario
 for insert as
 declare @contraseña varchar(50)
 select @contraseña = contraseña from inserted
-if(@contraseña like '[A-Z]%')
+if(@contraseña not like '[A-Z]%')
 begin 
 	rollback tran
     raiserror('LA CONTRASEÑA DEBE EMPEZAR CON UNA LETRA',16,1)

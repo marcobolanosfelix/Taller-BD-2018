@@ -35,3 +35,14 @@ create view Lugar_V
 as 
 select nombre,longitud,latitud,descripcion from Lugar 
 go
+
+
+Create view RandFecha
+as
+select DATEADD(day,rand()*(datediff(day,'2015-02-18',getdate())-1+1),'2015-02-18') as Fecha
+go
+
+Create view RandHora
+as
+select convert(time,DATEADD(MILLISECOND,rand()*(datediff(MILLISECOND,'00:00:00','23:59:59')+1),'00:00:00')) as Hora
+Go
