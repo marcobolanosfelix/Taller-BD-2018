@@ -2003,4 +2003,6 @@ values('Cheque Bancario','El pago se realizó mediante un cheque afiliado a una 
 select*from Pago
 select ID_Cliente,v.Folio,Fecha,Sum(PrecioUnitarioProducto*Cantidad) from Venta v inner join DetalleVenta d on d.Folio_Venta=v.Folio group by v.Folio,Fecha,ID_Cliente
 select*from DetalleVenta
-insert into Pago(
+select*from TipoPago
+insert into Pago(ID,ID_Cliente,Monto,Fecha,Hora,ID_TipoPAgo)
+values(1,124,$,,(select*from Hora),)
