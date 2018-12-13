@@ -53,14 +53,52 @@ begin
 end
 go
 
-create trigger asignalogro on Checkin
+create trigger asignalogrofotogenico on Checkin
 for insert as 
-declare @lugar int @usuario int @fecha datetime, @count int 
+declare @lugar int, @usuario int, @fecha date, @count int,@hora time
 set @count=0
 select @lugar=lugar_id,@usuario=usuario_id,@fecha=fecha from inserted
 
 select @count= count(*) from Checkin
-where usuario_id=@usuario and lugar_id=@lugar
-if (@count=3 and @lugar=1)
+where usuario_id=@usuario and lugar_id in (select id_lugar from Lugar l inner join Etiqueta_Lugar e on e.id_lugar=l.id and e.id_etiqueta=2)
+if (@count=3)
 begin 
-insert Logro values(3,@usuario,@lugar,@fecha
+if not exists (select*from Logro where id_usuario=@usuario and id_insignia=1)
+insert Logro values(1,@lugar,@usuario,@fecha,@hora)
+end
+go
+
+
+go
+create trigger asignalogrocanoa on Checkin
+for insert as 
+declare @lugar int, @usuario int, @fecha date, @count int,@hora time
+set @count=0
+select @lugar=lugar_id,@usuario=usuario_id,@fecha=fecha from inserted
+
+select @count= count(*) from Checkin
+where usuario_id=@usuario and lugar_id in (select id_lugar from Lugar l inner join Etiqueta_Lugar e on e.id_lugar=l.id and e.id_etiqueta=1)
+
+if (@count=3)
+begin 
+if not exists (select*from Logro where id_usuario=@usuario and id_insignia=8)
+insert Logro values(8,@lugar,@usuario,@fecha,@hora)
+end
+go
+
+
+go
+create trigger asignalogroexotico on Checkin
+for insert as 
+declare @lugar int, @usuario int, @fecha date, @count int,@hora time
+set @count=0
+select @lugar=lugar_id,@usuario=usuario_id,@fecha=fecha from inserted
+
+select @count= count(*) from Checkin
+where usuario_id=@usuario and lugar_id in (select id_lugar from Lugar l inner join Etiqueta_Lugar e on e.id_lugar=l.id and e.id_etiqueta=3)
+
+if (@count=3)
+begin 
+if not exists (select*from Logro where id_usuario=@usuario and id_insignia=8)
+insert Logro values(8,@lugar,@usuario,@fecha,@hora)
+end
